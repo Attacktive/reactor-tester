@@ -4,14 +4,6 @@ A Kotlin project for testing and exploring Project Reactor's reactive programmin
 
 ## Getting Started
 
-### Clone and Build
-
-```bash
-git clone <repository-url>
-cd reactor-tester
-./gradlew build
-```
-
 ### Run Tests
 
 ```bash

@@ -9,7 +9,7 @@ class FluxTester {
 	@Test
 	fun `test priority - map vs switchIfEmpty`() {
 		val flux = Flux.empty<String>()
-			.map { it.uppercase() }
+			.map { it.lowercase() }
 			.switchIfEmpty(Flux.just("empty"))
 
 		StepVerifier.create(flux)
@@ -33,27 +33,27 @@ class FluxTester {
 	@Test
 	fun `test then on empty Flux`() {
 		val flux = Flux.empty<String>()
-			.then(Mono.just("fallback"))
+			.then(Mono.just("fallback value"))
 
 		StepVerifier.create(flux)
-			.expectNext("fallback")
+			.expectNext("fallback value")
 			.verifyComplete()
 	}
 
 	@Test
 	fun `test then vs switchIfEmpty on empty Flux`() {
 		val thenFlux = Flux.empty<String>()
-			.then(Mono.just("then result"))
+			.then(Mono.just("then operator result"))
 
 		val switchFlux = Flux.empty<String>()
-			.switchIfEmpty(Flux.just("switch result"))
+			.switchIfEmpty(Flux.just("switchIfEmpty operator result"))
 
 		StepVerifier.create(thenFlux)
-			.expectNext("then result")
+			.expectNext("then operator result")
 			.verifyComplete()
 
 		StepVerifier.create(switchFlux)
-			.expectNext("switch result")
+			.expectNext("switchIfEmpty operator result")
 			.verifyComplete()
 	}
 
@@ -61,10 +61,10 @@ class FluxTester {
 	fun `test then with map on empty Flux`() {
 		val flux = Flux.empty<String>()
 			.map { "this won't execute" }
-			.then(Mono.just("then result"))
+			.then(Mono.just("then after map result"))
 
 		StepVerifier.create(flux)
-			.expectNext("then result")
+			.expectNext("then after map result")
 			.verifyComplete()
 	}
 }

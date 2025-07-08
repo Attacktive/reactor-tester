@@ -9,10 +9,10 @@ class MonoTester {
 	fun `test priority - map vs switchIfEmpty`() {
 		val mono = Mono.empty<String>()
 			.map { "transformed" }
-			.switchIfEmpty(Mono.just("empty"))
+			.switchIfEmpty(Mono.just("empty fallback"))
 
 		StepVerifier.create(mono)
-			.expectNext("empty")
+			.expectNext("empty fallback")
 			.verifyComplete()
 	}
 
@@ -20,48 +20,48 @@ class MonoTester {
 	fun `test priority - flatMap vs switchIfEmpty`() {
 		val mono = Mono.empty<String>()
 			.flatMap { Mono.just("transformed") }
-			.switchIfEmpty(Mono.just("empty"))
+			.switchIfEmpty(Mono.just("flatMap empty fallback"))
 
 		StepVerifier.create(mono)
-			.expectNext("empty")
+			.expectNext("flatMap empty fallback")
 			.verifyComplete()
 	}
 
 	@Test
 	fun `test priority - map vs switchIfEmpty when not empty`() {
 		val mono = Mono.just("something")
-			.map { "transformed" }
+			.map { "transformed value" }
 			.switchIfEmpty(Mono.just("empty"))
 
 		StepVerifier.create(mono)
-			.expectNext("transformed")
+			.expectNext("transformed value")
 			.verifyComplete()
 	}
 
 	@Test
 	fun `test then on empty Mono`() {
 		val mono = Mono.empty<String>()
-			.then(Mono.just("fallback"))
+			.then(Mono.just("then fallback value"))
 
 		StepVerifier.create(mono)
-			.expectNext("fallback")
+			.expectNext("then fallback value")
 			.verifyComplete()
 	}
 
 	@Test
 	fun `test then vs switchIfEmpty on empty Mono`() {
 		val thenMono = Mono.empty<String>()
-			.then(Mono.just("then result"))
+			.then(Mono.just("then operator output"))
 
 		val switchMono = Mono.empty<String>()
-			.switchIfEmpty(Mono.just("switch result"))
+			.switchIfEmpty(Mono.just("switchIfEmpty operator output"))
 
 		StepVerifier.create(thenMono)
-			.expectNext("then result")
+			.expectNext("then operator output")
 			.verifyComplete()
 
 		StepVerifier.create(switchMono)
-			.expectNext("switch result")
+			.expectNext("switchIfEmpty operator output")
 			.verifyComplete()
 	}
 
@@ -69,10 +69,10 @@ class MonoTester {
 	fun `test then with map on empty Mono`() {
 		val mono = Mono.empty<String>()
 			.map { "this won't execute" }
-			.then(Mono.just("then result"))
+			.then(Mono.just("then after map output"))
 
 		StepVerifier.create(mono)
-			.expectNext("then result")
+			.expectNext("then after map output")
 			.verifyComplete()
 	}
 }

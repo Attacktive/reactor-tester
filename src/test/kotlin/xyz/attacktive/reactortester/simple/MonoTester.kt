@@ -75,4 +75,17 @@ class MonoTester {
 			.expectNext("then after map output")
 			.verifyComplete()
 	}
+
+	@Test
+	fun `test then on error`() {
+		val mono = Mono.error<String>(RuntimeException("intentionally thrown exception"))
+			.thenReturn("ignored")
+
+		StepVerifier.create(mono)
+			.expectErrorSatisfies {
+				it is RuntimeException
+				it.message == "intentionally thrown exception"
+			}
+			.verify()
+	}
 }

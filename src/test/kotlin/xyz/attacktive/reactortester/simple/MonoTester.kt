@@ -37,4 +37,42 @@ class MonoTester {
 			.expectNext("transformed")
 			.verifyComplete()
 	}
+
+	@Test
+	fun `test then on empty Mono`() {
+		val mono = Mono.empty<String>()
+			.then(Mono.just("fallback"))
+
+		StepVerifier.create(mono)
+			.expectNext("fallback")
+			.verifyComplete()
+	}
+
+	@Test
+	fun `test then vs switchIfEmpty on empty Mono`() {
+		val thenMono = Mono.empty<String>()
+			.then(Mono.just("then result"))
+
+		val switchMono = Mono.empty<String>()
+			.switchIfEmpty(Mono.just("switch result"))
+
+		StepVerifier.create(thenMono)
+			.expectNext("then result")
+			.verifyComplete()
+
+		StepVerifier.create(switchMono)
+			.expectNext("switch result")
+			.verifyComplete()
+	}
+
+	@Test
+	fun `test then with map on empty Mono`() {
+		val mono = Mono.empty<String>()
+			.map { "this won't execute" }
+			.then(Mono.just("then result"))
+
+		StepVerifier.create(mono)
+			.expectNext("then result")
+			.verifyComplete()
+	}
 }

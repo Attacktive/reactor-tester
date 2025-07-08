@@ -2,6 +2,7 @@ package xyz.attacktive.reactortester.simple
 
 import kotlin.test.Test
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
 
 class FluxTester {
@@ -26,6 +27,44 @@ class FluxTester {
 			.expectNext("FOO")
 			.expectNext("BAR")
 			.expectNext("BAZ")
+			.verifyComplete()
+	}
+
+	@Test
+	fun `test then on empty Flux`() {
+		val flux = Flux.empty<String>()
+			.then(Mono.just("fallback"))
+
+		StepVerifier.create(flux)
+			.expectNext("fallback")
+			.verifyComplete()
+	}
+
+	@Test
+	fun `test then vs switchIfEmpty on empty Flux`() {
+		val thenFlux = Flux.empty<String>()
+			.then(Mono.just("then result"))
+
+		val switchFlux = Flux.empty<String>()
+			.switchIfEmpty(Flux.just("switch result"))
+
+		StepVerifier.create(thenFlux)
+			.expectNext("then result")
+			.verifyComplete()
+
+		StepVerifier.create(switchFlux)
+			.expectNext("switch result")
+			.verifyComplete()
+	}
+
+	@Test
+	fun `test then with map on empty Flux`() {
+		val flux = Flux.empty<String>()
+			.map { "this won't execute" }
+			.then(Mono.just("then result"))
+
+		StepVerifier.create(flux)
+			.expectNext("then result")
 			.verifyComplete()
 	}
 }

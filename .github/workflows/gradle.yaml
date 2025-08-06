@@ -20,7 +20,7 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
       - name: 'Setup Gradle'
-        uses: 'gradle/actions/setup-gradle@8379f6a1328ee0e06e2bb424dadb7b159856a326'
+        uses: 'gradle/actions/setup-gradle@017a9effdb900e5b5b2fddfb590a105619dca3c3'
       - name: 'Build with Gradle'
         run: './gradlew compileKotlin compileTestKotlin'
       - name: 'Run tests with Gradle'

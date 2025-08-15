@@ -1,5 +1,5 @@
 plugins {
-	val kotlinGradlePluginVersion = "2.2.0"
+	val kotlinGradlePluginVersion = "2.2.10"
 
 	kotlin("jvm") version kotlinGradlePluginVersion
 	kotlin("plugin.spring") version kotlinGradlePluginVersion

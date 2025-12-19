@@ -3,7 +3,7 @@ plugins {
 
 	kotlin("jvm") version kotlinGradlePluginVersion
 	kotlin("plugin.spring") version kotlinGradlePluginVersion
-	id("org.springframework.boot") version "4.0.0"
+	id("org.springframework.boot") version "4.0.1"
 	id("io.spring.dependency-management") version "1.1.7"
 }
 
